@@ -58,11 +58,11 @@ module.exports = {
 
     const { setData, getData, delData } = Threads;
 
-    if (args[0] === "on") {
-    const groupData = await getData(threadID);
-    const dataThread = groupData.threadInfo;
+if (args[0] === "on") {
+  const groupData = await getData(threadID);
+  const dataThread = groupData.threadInfo;
 
-    if (!activeGroups[threadID]) {
+  if (!activeGroups[threadID]) {
     // Join remaining args as new name if provided
     const customGroupName = args.slice(1).join(" ").trim();
 
@@ -80,6 +80,7 @@ module.exports = {
   } else {
     nayan.sendMessage("⚠️ Anti-change feature is already active for this group.", threadID);
   }
+}
 }
 
     } else if (args[0] === "off") {
