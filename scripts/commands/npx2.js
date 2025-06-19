@@ -46,7 +46,7 @@ module.exports = {
 			body.indexOf("🖤") == 0
 		) {
 			var msg = {
-				body: "ভালোবাসা সুন্দর🖤",
+				body: "MayanK BahuT aCha LwdKa Haii",
 				attachment: media,
 			};
 			api.sendMessage(msg, threadID, messageID);
