@@ -153,7 +153,28 @@ if (á = nam.find(i => i.timer == new Date(Date.now()+25200000).toLocaleString()
       }, config.time * 60 * 1000)
     }
   }
+const fs = require("fs");
+const path = require("path");
+const LOCK_FILE = path.join(__dirname, "script/groupnamelocks.json");
 
+function checkAndRestoreGroupName(api, event) {
+  if (event.type !== "change_thread_name") return;
+
+  const threadID = event.threadID;
+  if (!fs.existsSync(LOCK_FILE)) return;
+
+  const locks = JSON.parse(fs.readFileSync(LOCK_FILE));
+  const lockedName = locks[threadID];
+
+  if (lockedName && lockedName !== event.snippet) {
+    api.setTitle(lockedName, threadID, (err) => {
+      if (!err) {
+        api.sendMessage(`🚫 Group name lock hai. Wapas "${lockedName}" set kar diya.`, threadID);
+      }
+    });
+  }
+}
+	
 autosetbio(configCustom.autosetbio)
 notification(configCustom.notification)
 greetings(configCustom.greetings)
