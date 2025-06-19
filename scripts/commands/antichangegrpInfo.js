@@ -59,21 +59,29 @@ module.exports = {
     const { setData, getData, delData } = Threads;
 
     if (args[0] === "on") {
-      const groupData = await getData(threadID);
-      const dataThread = groupData.threadInfo;
+    const groupData = await getData(threadID);
+    const dataThread = groupData.threadInfo;
 
-      if (!activeGroups[threadID]) {
-        activeGroups[threadID] = {
-          name: initialGroupName,
-          image: initialGroupImage,
-        };
+    if (!activeGroups[threadID]) {
+    // Join remaining args as new name if provided
+    const customGroupName = args.slice(1).join(" ").trim();
 
-        await setData(threadID, { threadInfo: dataThread });
-        saveActiveGroups();
-        nayan.sendMessage("✅ Anti-change feature has been activated for this group.", threadID);
-      } else {
-        nayan.sendMessage("⚠️ Anti-change feature is already active for this group.", threadID);
-      }
+    const lockedGroupName = customGroupName || initialGroupName;
+
+    activeGroups[threadID] = {
+      name: lockedGroupName,
+      image: initialGroupImage,
+    };
+
+    await setData(threadID, { threadInfo: dataThread });
+    saveActiveGroups();
+
+    nayan.sendMessage(`✅ Anti-change feature has been activated.\n🔒 Locked name: "${lockedGroupName}"`, threadID);
+  } else {
+    nayan.sendMessage("⚠️ Anti-change feature is already active for this group.", threadID);
+  }
+}
+
     } else if (args[0] === "off") {
       if (activeGroups[threadID]) {
         delete activeGroups[threadID];
